@@ -1,0 +1,48 @@
+
+  So, crt. We want to solve a system of equations, x=a (p) and x=b (q)
+  modulo p*q. Before getting lost in notation, let me state the trick
+  (which is actually rather simple). p and q are coprime, so we can
+  invert them in their respective modulii. If we have a solution in
+  Z/(p*q)Z, the way to recover the separate equations in the smaller
+  Z/pZ and Z/qZ, is to use the inverses. Bascially, we want to
+  construct a number that has two parts that each melt away separately
+  when studied in the smaller domains.
+
+  Turning to notation, let $p'$ be $p^{-1}$ in $Z/qZ$ and q' be q^-1
+  in Z/pZ. We now pull the rabbit out of the hat: $$r = a\cdot q\cdot
+  q' + b\cdot p\cdot p'$$ This is great, because what happens modulo
+  $p$? $r \equiv a\cdot q\cdot q' + 0 \equiv a$, because $q'$ is
+  $q^{-1} \mod p$. Same thing in $Z/qZ$!
+
+  So, now the idea is that the huge ass number, ~13082761331670030~,
+  has only small (unique) prime factors.
+
+#+BEGIN_SRC j :session :exports both
+m=: 91 [ M=: 13082761331670030x
+cube_roots=: [: I. [: 1&= ] | 3 ^~ i.
+rabbit=: ([: < cube_roots ;"0 ])"0
+
+flt=: 4 : 'x: x (y&|@^) (y - 2)'
+
+crt=: 4 : 0
+m=. p*q [ 'a p' =. x [ 'b q' =. y
+(m|((a*q*(q flt p)) + (b*p*(p flt q)))) ; m
+)
+
+comb=: 4 : 0
+,/ ((>x) crt"1/ (>y))
+)
+NB. ,. (q: M) ; cube_roots 91
+
+NB. (2;7) crt (3;13)
+NB. rabbit q: M
+<: +/ > 0{"1 comb/ rabbit q: M
+NB. (rabbit 7) comb (rabbit 13)
+NB. ((cube_roots ;"0 ]) 13) crt"1/ ((cube_roots ;"0 ]) 7)
+#+END_SRC
+
+#+RESULTS:
+
+  What this enables us to do is to find roots brutishly in the smaller
+  modulii to combine them in into roots in larger modulii. Eventually
+  all the cube roots of the big number ~M~ are enumerated.
