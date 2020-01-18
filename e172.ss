@@ -9,10 +9,14 @@
                                        (list-tail xs (1+ n)))))))
               (enumerate xs)))
 
-(defmemo (e172 digits n)
+(defmemo (build digits n)
   (cond ((ormap (lambda (d) (< d 0)) digits) 0)
         ((zero? n) 1)
         (else (fold-left (lambda (ways digits)
-                           (+ ways (e172 digits (1- n))))
+                           (+ ways (build digits (1- n))))
                          0
                          (sub-one digits)))))
+
+(define (e172)
+  (* 9 (build (cons 2 (make-list 9 3))
+              17)))
