@@ -4,9 +4,10 @@
   (filter-map (lambda (n)
                 (let ((x (list-ref xs n)))
                   (and (< 0 x)
-                       (sort < (append (list-head xs n)
-                                       (list (1- x))
-                                       (list-tail xs (1+ n)))))))
+                       (merge <
+                              (list (1- x))
+                              (append (list-head xs n)
+                                      (list-tail xs (1+ n)))))))
               (enumerate xs)))
 
 (defmemo (build digits n)
@@ -17,6 +18,6 @@
                          0
                          (sub-one digits)))))
 
-(define (e172)
+(define (e172 n)
   (* 9 (build (cons 2 (make-list 9 3))
-              17)))
+              (1- n))))
