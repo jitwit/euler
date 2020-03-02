@@ -1,4 +1,23 @@
-(import (euler))
+(import (euler)
+        (prefix (patricia) t:))
+
+(define (digit-table n)
+  (fold-right (lambda (x t)
+                (t:insert x 0 t))
+              (t:insert (1- n) 1 (t:singleton n 9))
+              (iota (1- n))))
+
+(defmemo (tree digits N) << (make-hashtable equal-hash t:tree-equal?) >>
+  (if (zero? N)
+      1
+      (t:tree-ifold-right (lambda (n k ways)
+                            (+ ways
+                               (if (zero? (* n k))
+                                   0
+                                   (* k (tree (t:modify 1+ (1- n) (t:modify 1- n digits))
+                                              (1- N))))))
+                          0
+                          digits)))
 
 (define (sub-one xs)
   (filter-map (lambda (n)
