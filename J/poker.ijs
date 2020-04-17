@@ -8,7 +8,6 @@ suit=: 3&(17 b.)
 HAND_TYPES=: (5#1);(2,3#1);(1,~2#2);(3,2#1);'S';'F';3 2;4 1;'SF'
 hand_type=: HAND_TYPES i. [: < #/.~
 
-NB. organize cards by most pairs with ties broken by rank. ost for straights
 order=: \: ((,.~ [: +/"1 (=/~)) @: rank)
 ost=: ]`(}.,13-~{.)@.(12 3-:2&{.)
 
@@ -17,3 +16,30 @@ flush=: 1=#@(#/.~suit)
 
 hand=: ((,~hand_type)@]`(4,ost@])`(5,])`(8,ost@])@.(straight@]+[:+:flush@[)rank)@:order
 winner=: ([:<:[:+:[:(-: /:~),&{.)`((([:<:[:+:[:(-: /:~);)`0:@.-:)&}.)@.(-:&{.)&hand
+
+comb=: 4 : 0
+  if. x e. 0 1 do. z=.<((x!y),x)$ i.y
+  else. t=. |.(<.@-:)^:(i.<. 2^.x)x
+    z=.({.t) ([:(,.&.><@;\.)/ >:@-~[\i.@]) ({.t)+y-x
+    for_j. 2[\t do.
+      z=.([ ;@:(<"1@[ (,"1 ({.j)+])&.> ])&.> <@;\.({&.><)~ (1+({.j)-~{:"1)&.>) z
+      if. 2|{:j do. z=.(i.1+y-x)(,.>:)&.> <@;\.z end.
+    end.
+  end.
+  ;z
+)
+
+combbool=: 4 : 0
+k=. <"1 (-i.1+d=.y-x)|."0 1 y{.1
+z=. (d$<(0,y)$0),<,:y#0
+for. i.x do. z=. k (+."1)&.> ,&.>/\. (_1&|."1)&.> z end.
+; z
+)
+
+example=: 'QH TH 8S 8H 9H 9D 8C'
+
+holdem=: (5 combbool 7) #"1 _ ]
+
+NB. HANDS=: 5 comb 52
+NB. TYPES=: ({.@hand)"1 HANDS
+]chart=: HAND_TYPES ,. <"0 +/"1 (i.9) =/ TYPES
