@@ -11,5 +11,5 @@ classify=: straight@] + [:+:flush@[
 hand=: ((,~hand_type)@]`(4,ost@])`(5,])`(8,ost@])@.classify rank)@:order
 winner=: (([:<:[:+:[:(-: /:~);)`0:@.-:)&hand
 
-hands=: ([: (('CDHS'i.{:) + 4*'23456789TJQKA'i.{.) ;._2 ' ',~]) ;. _2 freads'~/code/euler/J/poker.txt'
+hands=: ([: (('CDHS'i.{:) + 4*'23456789TJQKA'i.{.) ;._2 ' ',~]) ;. _2 freads'~/code/euler/input/poker.txt'
 ]e54=: +/ (_1 = 5&{. winner 5&}.)"1 hands
