@@ -3,7 +3,7 @@ typedef unsigned long long I;
 #define N 200000
 #define R return
 
-I V2[N-1] = {0};I V5[N-1] = {0};
+I V2[N+1] = {0};I V5[N+1] = {0};
 
 // legendre p-adic valuation (how many times p divides n!)
 I v_p(I p,I n) { I x = 0; for (I pk=p; pk<=n; pk*=p) x += n/pk; R x; }
